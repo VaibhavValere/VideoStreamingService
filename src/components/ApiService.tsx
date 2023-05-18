@@ -1,5 +1,5 @@
-// const BASE_URL = 'https://f258-113-193-26-86.ngrok-free.app/';
-const BASE_URL = 'http://192.168.0.248:8080/';
+const BASE_URL = 'https://c9a1-2409-4042-4b0e-9a29-413-70c5-80ec-f67a.ngrok-free.app/';
+// const BASE_URL = 'http://192.168.0.152:8080/';
 
 type GetSignedUrlProps = {
   fileExt: string;
@@ -30,16 +30,16 @@ export const GetSignedUrl = async (
 
 export const CreatePost = async (videoName: string | null) => {
   console.log('Creating Post...');
-  let newName = videoName?.replace("mp4","m3u8");  
-  newName = newName?.replace("mov","m3u8");  
-  console.log(newName);
+  // let newName = videoName?.replace("mp4","m3u8");  
+  // newName = newName?.replace("mov","m3u8");  
+  // console.log(newName);
 
   const END_POINT = 'api/v1/video-url';
   const url = BASE_URL + END_POINT;
   await fetch(url, {
     method: 'POST',
     body: JSON.stringify({
-      videoUrl: newName,
+      videoUrl: videoName,
     }),
   })
     .then(async response => {

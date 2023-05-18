@@ -48,7 +48,9 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       res.didCancel && setStatus('Canceled');
       res.errorCode && setStatus('Error Code: ' + res.errorCode);
       res.errorMessage && setStatus('Error Message: ' + res.errorMessage);
-    });
+    }).catch(err=>{
+      console.log("Error while selecting video: ", err);
+    })
   };
 
   const SelectorComponent = () => {
@@ -113,7 +115,7 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       <SelectorComponent />
       {/* {selectedThumbnail && <CompressorComponent />} */}
 
-      {selectedMedia?.uri && <VideoUpload url={selectedMedia?.uri} />}
+      {selectedMedia?.uri && <VideoUpload url={selectedMedia?.uri} type={selectedMedia.type}   />}
 
       <Button
         title="View Videos"

@@ -1,19 +1,16 @@
-import React ,{useState}from 'react';
+import React, {useState} from 'react';
 import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {GetSignedUrl, CreatePost} from './ApiService';
 
 export const VideoUpload = (props: VideoUploadProps) => {
-
-  const [videoStatus, setvideoStatus] = useState("");
-
-
+  const [videoStatus, setvideoStatus] = useState('');
 
   return (
     <SafeAreaView style={styles.container}>
       <Text>Video Uploader</Text>
       <Button
         title="Upload Without Compression"
-        onPress={() => uploadFetch(props?.url, setvideoStatus)}
+        onPress={() => uploadFetch(props?.url, setvideoStatus, props?.type)}
       />
       <Text>Video Upload Status: {videoStatus}</Text>
     </SafeAreaView>
@@ -36,21 +33,26 @@ const styles = StyleSheet.create({
   },
 });
 
-export const uploadFetch = async (url: string, setVideoStatus:Function) => {
+export const uploadFetch = async (
+  url: string,
+  setVideoStatus: Function,
+  type: string,
+) => {
   const fileFormat = getFileFormat(url);
   const signed_url = await GetSignedUrl(fileFormat);
   console.log('Got Signed Url: ', {signed_url});
   const media = {
     uri: url,
-    type: 'video/' + fileFormat,
+    type: type,
     name: getFileName(url),
   };
-  console.log('Starting Video Upload');
-  setVideoStatus("Started Uploading")
+
+  console.log('Starting Video Upload', {media});
+  setVideoStatus('Started Uploading');
   await fetch(signed_url, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'video/mp4',
+      'Content-Type': type,
     },
     body: media,
     ACL: 'public-read',
@@ -61,7 +63,7 @@ export const uploadFetch = async (url: string, setVideoStatus:Function) => {
       console.log('Result: ', {response});
       let temp = response.url.split('?')[0].split('01/')[1];
       CreatePost(temp);
-      setVideoStatus("Uploading Completed")
+      setVideoStatus('Uploading Completed');
     })
     .catch(err => {
       console.error('err', {err});
