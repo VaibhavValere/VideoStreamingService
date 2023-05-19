@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Button,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -23,10 +24,12 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
   const [selectedThumbnail, setSelectedThumbnail] = useState<any>(null);
   const [status, setStatus] = useState('');
   const [compressedMedia, setCompressedMedia] = useState<any>(null);
+  const [mediaLoading, setMediaLoading] = useState(false);
 
   const [progress, setProgress] = useState(0);
 
   const SelectMedia = async () => {
+    setMediaLoading(true);
     const result = await launchImageLibrary({
       mediaType: 'video',
       videoQuality: 'low',
@@ -49,9 +52,11 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
         res.didCancel && setStatus('Canceled');
         res.errorCode && setStatus('Error Code: ' + res.errorCode);
         res.errorMessage && setStatus('Error Message: ' + res.errorMessage);
+        setMediaLoading(false);
       })
       .catch(err => {
         console.log('Error while selecting video: ', err);
+        setMediaLoading(false);
       });
   };
 
@@ -116,6 +121,11 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
     <SafeAreaView style={styles.container}>
       <SelectorComponent />
       {/* {selectedThumbnail && <CompressorComponent />} */}
+      <ActivityIndicator
+        animating={mediaLoading}
+        color={'black'}
+        size={'large'}
+      />
 
       {selectedMedia?.uri && (
         <VideoUpload url={selectedMedia?.uri} type={selectedMedia.type} />
