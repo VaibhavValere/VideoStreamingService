@@ -23,7 +23,7 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
   const [selectedThumbnail, setSelectedThumbnail] = useState<any>(null);
   const [status, setStatus] = useState('');
   const [compressedMedia, setCompressedMedia] = useState<any>(null);
-  
+
   const [progress, setProgress] = useState(0);
 
   const SelectMedia = async () => {
@@ -31,26 +31,28 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       mediaType: 'video',
       videoQuality: 'low',
       selectionLimit: 1,
-    }).then(res => {
-      console.log(res)
-      if (res.assets) {
-        console.log(res.assets[0]);
-        res.assets && setStatus('Media selected');
-        res.assets && setSelectedMedia(res.assets[0]);
-        createThumbnail({
-          url: res?.assets[0]?.uri || ' ',
-        }).then(res => {
-          console.log('THumbnail: ', res);
-          setSelectedThumbnail(res);
-        });
-      }
-
-      res.didCancel && setStatus('Canceled');
-      res.errorCode && setStatus('Error Code: ' + res.errorCode);
-      res.errorMessage && setStatus('Error Message: ' + res.errorMessage);
-    }).catch(err=>{
-      console.log("Error while selecting video: ", err);
     })
+      .then(res => {
+        console.log(res);
+        if (res.assets) {
+          console.log(res.assets[0]);
+          res.assets && setStatus('Media selected');
+          res.assets && setSelectedMedia(res.assets[0]);
+          createThumbnail({
+            url: res?.assets[0]?.uri || ' ',
+          }).then(res => {
+            console.log('THumbnail: ', res);
+            setSelectedThumbnail(res);
+          });
+        }
+
+        res.didCancel && setStatus('Canceled');
+        res.errorCode && setStatus('Error Code: ' + res.errorCode);
+        res.errorMessage && setStatus('Error Message: ' + res.errorMessage);
+      })
+      .catch(err => {
+        console.log('Error while selecting video: ', err);
+      });
   };
 
   const SelectorComponent = () => {
@@ -115,17 +117,24 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       <SelectorComponent />
       {/* {selectedThumbnail && <CompressorComponent />} */}
 
-      {selectedMedia?.uri && <VideoUpload url={selectedMedia?.uri} type={selectedMedia.type}   />}
+      {selectedMedia?.uri && (
+        <VideoUpload url={selectedMedia?.uri} type={selectedMedia.type} />
+      )}
 
       <Button
         title="View Videos"
         onPress={async () => {
-          const posts = await GetPostsList();
-          console.log(posts);
+          const response = await GetPostsList({limit: 20, offset: 0});
+          console.log({response});
           navigation.navigate('VideoSlider', {
-            data: posts,
+            data: response.data,
           });
         }}
+      />
+
+      <Button
+        title="Recycle List"
+        onPress={() => navigation.navigate('RecycleList')}
       />
     </SafeAreaView>
   );

@@ -6,24 +6,33 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {VideoSelector} from './src/components/VideoSelector';
 import {VideoSlider} from './src/components/VideoSlider';
+import {RecycleList} from './src/components/RecycleList';
+import {Provider} from 'react-redux';
+import SlidingVideoComp from './src/components/SlidingVideoComp';
+
+import configureStore from './src/redux/configureStore';
+const store = configureStore();
 
 const Stack = createNativeStackNavigator();
 function App(): JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="VideoSelector" component={VideoSelector} />
-        <Stack.Screen name="VideoSlider" component={VideoSlider} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
+          <Stack.Screen name="VideoSelector" component={VideoSelector} />
+          <Stack.Screen name="VideoSlider" component={VideoSlider} />
+          <Stack.Screen name="RecycleList" component={RecycleList} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 

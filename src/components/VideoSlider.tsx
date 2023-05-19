@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,10 @@ import {
   Platform,
 } from 'react-native';
 import Video from 'react-native-video';
+import SlidingVideoComp from './SlidingVideoComp';
 
 const {width, height} = Dimensions.get('screen');
-const isIOS = Platform.OS==="ios";
+const isIOS = Platform.OS === 'ios';
 
 type VideoSliderProps = {
   navigation: object;
@@ -21,65 +22,79 @@ type VideoSliderProps = {
 
 export const VideoSlider = (props: VideoSliderProps) => {
   const {data} = props?.route?.params;
+  const [items, setItems] = useState<any>([]);
+  const [itemRefs, setItemRefs] = useState({});
 
-  const [currentlyVisibleItem, setcurrentlyVisibleItem] = useState(data[0].id);
+  let prevItem: any = null;
 
-  const onViewRef = React.useRef((viewableItems: any) => {
-    // console.log({viewableItems});
-    const tempIndex = viewableItems.changed[0].item.id;
-    setcurrentlyVisibleItem(tempIndex);
+  useEffect(() => {
+    // function to load here
+    loadItems();
+  }, []);
+
+  const loadItems = () => {
+    const start = data?.length;
+    const newItems = data.map((item: any, i: number) => ({
+      ...item,
+      id: i,
+    }));
+    const itemsList = [...items, ...newItems];
+    setItems(itemsList);
+    console.log(itemsList);
+  };
+
+  const onViewRef = React.useRef((props: any) => {
+    props.changed.forEach((item: any) => {
+      const cell: any = itemRefs[item.key];
+      console.log(cell);
+      if (cell) {
+        if (item.isViewable) {
+          cell.setNativeProps({
+            paused: false,
+          });
+        } else {
+          cell.setNativeProps({
+            paused: true,
+          });
+        }
+      }
+    });
   });
-  return (
-    <FlatList
-      style={styles.flatlistStyle}
-      data={data}
-      renderItem={({item}) => (
-        <VideoComponent data={item} index={currentlyVisibleItem} />
-      )}
-      keyExtractor={item => item.id}
-      snapToInterval={height}
-      snapToAlignment={'start'}
-      // snapToOffsets={[height]}
-      decelerationRate={'fast'}
-      onViewableItemsChanged={onViewRef.current}
-      viewabilityConfig={{
-        itemVisiblePercentThreshold: 80,
-        minimumViewTime: 500,
-      }}
-    />
-  );
-};
 
-type VideoComponentProps = {
-  data: DataProps;
-  index: number;
-};
-const VideoComponent = ({data, index}: VideoComponentProps) => {
-  const videoRef = useRef();
-
-  const onBuffer = () => {
-    console.log('Buffering');
+  const renderItem = ({item, index}: any) => {
+    return (
+      <SlidingVideoComp
+        ref={(ref: any) => {
+          if (ref) {
+            const id = item.id;
+            setItemRefs((old: any) => {
+              old[id] = ref;
+              return old;
+            });
+          }
+        }}
+        data={item}
+      />
+    );
   };
 
   return (
-    <View style={styles.videoContainer}>
-      <Video
-        source={{uri: data.videoUrl ? data.videoUrl :data.orignal}}
-        ref={videoRef} // Store reference
-        onError={(e: any) => console.info('VideoError:', {e})} // Callback when video cannot be loaded
-        style={styles.videoStyle}
-        // paused={true}
-        paused={data.id === index ? false : true}
-        // muted={true}
-        muted={false}
-        onBuffer={onBuffer}
-        // controls={isIOS? true: false}
-        controls={true}
-        resizeMode={'cover'}
-
-        repeat={true}
+    <>
+      <FlatList
+        style={styles.flatlistStyle}
+        data={items}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        snapToInterval={height}
+        snapToAlignment={'start'}
+        decelerationRate={'fast'}
+        windowSize={3}
+        onViewableItemsChanged={onViewRef.current}
+        viewabilityConfig={{
+          itemVisiblePercentThreshold: 60,
+        }}
       />
-    </View>
+    </>
   );
 };
 
@@ -87,32 +102,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  videoStyle: {
-    width: width,
-    // height: height - 300,
-    height,
-    backgroundColor: '#f69d9d7b',
-  },
-  videoContainer: {
-    width: width,
-    height: height,
-    backgroundColor: '#0000ff50',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomColor: 'red',
-    borderBottomWidth: 1,
-  },
+
   flatlistStyle: {
     backgroundColor: 'green',
+    height: height - 100,
   },
 });
-
-type DataProps = {
-  createdAt: number;
-  updatedAt: number;
-  id: string;
-  videoUrl: string;
-  orignal?:string
-};
-
-
