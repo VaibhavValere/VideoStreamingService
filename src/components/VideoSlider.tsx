@@ -30,6 +30,7 @@ export const VideoSlider = (props: VideoSliderProps) => {
 
   useEffect(() => {
     // function to load here
+
     loadItems();
   }, []);
 
@@ -52,10 +53,12 @@ export const VideoSlider = (props: VideoSliderProps) => {
         if (item.isViewable) {
           cell.setNativeProps({
             paused: false,
+            muted: false,
           });
         } else {
           cell.setNativeProps({
             paused: true,
+            muted: true,
           });
         }
       }
