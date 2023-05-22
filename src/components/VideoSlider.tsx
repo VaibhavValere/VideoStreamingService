@@ -12,7 +12,9 @@ import {
 import Video from 'react-native-video';
 import SlidingVideoComp from './SlidingVideoComp';
 
-const {width, height} = Dimensions.get('screen');
+const {width, height} = Dimensions.get(
+  Platform.OS == 'ios' ? 'screen' : 'window',
+);
 
 type VideoSliderProps = {
   navigation: object;

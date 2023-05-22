@@ -25,7 +25,6 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
         style={styles.videoStyle}
         muted={true}
         onBuffer={onBuffer}
-        // controls={true}
         resizeMode={'cover'}
         repeat={true}
       />
