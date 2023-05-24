@@ -128,17 +128,17 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       />
 
       {selectedMedia?.uri && (
-        <VideoUpload url={selectedMedia?.uri} type={selectedMedia.type} />
+        <VideoUpload
+          url={selectedMedia?.uri}
+          type={selectedMedia.type}
+          thumbnail={selectedThumbnail}
+        />
       )}
 
       <Button
         title="View Videos"
         onPress={async () => {
-          const response = await GetPostsList({limit: 20, offset: 0});
-          console.log({response});
-          navigation.navigate('VideoSlider', {
-            data: response.data,
-          });
+          navigation.navigate('VideoSlider');
         }}
       />
 

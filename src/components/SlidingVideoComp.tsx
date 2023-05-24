@@ -9,13 +9,8 @@ type SlidingVideoCompProps = {
 };
 
 const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
-  const videoLink = data.videoUrl ? data.videoUrl : data.orignal;
-  //   const videoRef = useRef();
-
-  const onBuffer = () => {
-    // console.log('Buffering :', data.id, index);
-  };
-
+  const videoLink = data.videoUrl ? data.videoUrl : data.original;
+  console.log({data});
   return (
     <View style={styles.videoContainer}>
       <Video
@@ -24,9 +19,18 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
         onError={(e: any) => console.info('VideoError:', {e})} // Callback when video cannot be loaded
         style={styles.videoStyle}
         muted={true}
-        onBuffer={onBuffer}
+        poster={data?.thumbnail}
+        onLoad={e => {
+          console.log('onLoad', e);
+        }}
+        posterResizeMode={'cover'}
+        // resizeMode={'contain'}
         resizeMode={'cover'}
         repeat={true}
+        selectedVideoTrack={{
+          type: 'resolution',
+          value: 540,
+        }}
       />
     </View>
   );
@@ -43,7 +47,7 @@ const styles = StyleSheet.create({
   videoContainer: {
     width: width,
     height: height,
-    backgroundColor: '#0000ff50',
+    backgroundColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'red',
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
     width: width,
     // height: height - 300,
     height,
-    backgroundColor: '#f69d9d7b',
+    backgroundColor: 'black',
   },
 });
 

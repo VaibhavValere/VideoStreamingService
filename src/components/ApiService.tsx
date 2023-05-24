@@ -29,11 +29,12 @@ export const GetSignedUrl = async (
   return uploadUrl;
 };
 
-export const CreatePost = async (videoName: string | null) => {
+export const CreatePost = async (
+  videoName: string | null,
+  thumbnailName: string | null,
+) => {
   console.log('Creating Post...');
-  // let newName = videoName?.replace("mp4","m3u8");
-  // newName = newName?.replace("mov","m3u8");
-  // console.log(newName);
+  console.log({thumbnailName});
 
   const END_POINT = 'api/v1/video-url';
   const url = BASE_URL + END_POINT;
@@ -41,6 +42,7 @@ export const CreatePost = async (videoName: string | null) => {
     method: 'POST',
     body: JSON.stringify({
       videoUrl: videoName,
+      thumbnail: thumbnailName,
     }),
   })
     .then(async response => {
