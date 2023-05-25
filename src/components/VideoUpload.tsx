@@ -3,7 +3,6 @@ import {View, Text, StyleSheet, SafeAreaView, Button} from 'react-native';
 import {GetSignedUrl, CreatePost} from './ApiService';
 
 export const VideoUpload = (props: any) => {
-  console.log({props});
   const [videoStatus, setvideoStatus] = useState('');
 
   return (
@@ -22,6 +21,9 @@ export const VideoUpload = (props: any) => {
 
 const getFileFormat = (url: string | null): any => {
   return url.slice((Math.max(0, url.lastIndexOf('.')) || Infinity) + 1);
+};
+const getImageFileFormat = (mime: string | null): any => {
+  return mime.split('/')[1];
 };
 
 const getFileName = (url: string | null): string => {
@@ -45,7 +47,7 @@ export const uploadFetch = async (
   const fileFormat = getFileFormat(url);
   const signed_url = await GetSignedUrl(fileFormat);
   const thumbnail_signed_url = await GetSignedUrl(
-    getFileFormat(thumbnail.path),
+    getImageFileFormat(thumbnail.mime),
   );
 
   console.log('Got Signed Url: ', {signed_url});
@@ -79,7 +81,6 @@ export const uploadFetch = async (
       let temp_thumbnail = '';
 
       // Upload Thumbnail
-      console.log({thumbnailMedia});
       await fetch(thumbnail_signed_url, {
         method: 'PUT',
         headers: {
@@ -90,7 +91,7 @@ export const uploadFetch = async (
       })
         .then(async response => {
           console.log('Completed Thumbnail Upload');
-          console.log('Result: ', {response});
+          // console.log('Result: ', {response});
           setVideoStatus('Completed Thumbnail Uploading Uploading');
           temp_thumbnail = response.url.split('?')[0].split('01/')[1];
           console.log({temp_thumbnail});

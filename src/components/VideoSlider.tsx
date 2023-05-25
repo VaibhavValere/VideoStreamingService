@@ -56,6 +56,8 @@ export const VideoSlider = (props: VideoSliderProps) => {
           cell.setNativeProps({
             paused: false,
             muted: false,
+            // paused: true,
+            // muted: true,
           });
         } else {
           cell.setNativeProps({

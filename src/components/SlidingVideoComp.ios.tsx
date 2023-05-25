@@ -10,7 +10,6 @@ type SlidingVideoCompProps = {
 
 const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
   const videoLink = data.videoUrl ? data.videoUrl : data.original;
-  console.log({data});
   return (
     <View style={styles.videoContainer}>
       <Video
@@ -20,11 +19,7 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
         style={styles.videoStyle}
         muted={true}
         poster={data?.thumbnail}
-        onLoad={e => {
-          console.log('onLoad', e);
-        }}
         posterResizeMode={'cover'}
-        // resizeMode={'contain'}
         resizeMode={'cover'}
         repeat={true}
         selectedVideoTrack={{
