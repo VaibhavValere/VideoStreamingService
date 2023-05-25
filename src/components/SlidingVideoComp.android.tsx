@@ -19,14 +19,18 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
         style={styles.videoStyle}
         muted={true}
         poster={
-          'https://video-streaming-test-source71e471f1-1bak2y81ud5bw.s3.amazonaws.com/assets01/5af504bb2aab6079b5ea80c85a7ba7ca.jpeg'
+          // 'https://video-streaming-test-source71e471f1-1bak2y81ud5bw.s3.amazonaws.com/assets01/5af504bb2aab6079b5ea80c85a7ba7ca.jpeg'
+          'https://baconmockup.com/300/200/'
+          // data?.thumbnail
         }
         posterResizeMode={'cover'}
         resizeMode={'cover'}
         repeat={true}
         selectedVideoTrack={{
-          type: 'resolution',
-          value: 540,
+          // type: 'resolution',
+          // value: 540,
+          type: 'index',
+          value: 0,
         }}
         // To reduce loading time
         bufferConfig={{
@@ -35,6 +39,11 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
           bufferForPlaybackMs: 2500,
           bufferForPlaybackAfterRebufferMs: 5000,
         }}
+        // Avoid black screen while loading
+        // hideShutterView={true} // no effect
+
+        // Uses surface view by defult
+        useTextureView={true}
       />
     </View>
   );
@@ -71,4 +80,5 @@ type DataProps = {
   id: string;
   videoUrl: string;
   orignal?: string;
+  thumbnail: string;
 };
