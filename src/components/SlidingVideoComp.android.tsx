@@ -18,11 +18,8 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
         onError={(e: any) => console.info('VideoError:', {e})} // Callback when video cannot be loaded
         style={styles.videoStyle}
         muted={true}
-        poster={
-          // 'https://video-streaming-test-source71e471f1-1bak2y81ud5bw.s3.amazonaws.com/assets01/5af504bb2aab6079b5ea80c85a7ba7ca.jpeg'
-          'https://baconmockup.com/300/200/'
-          // data?.thumbnail
-        }
+        paused={true}
+        poster={data?.thumbnail}
         posterResizeMode={'cover'}
         resizeMode={'cover'}
         repeat={true}
@@ -43,7 +40,7 @@ const SlidingVideoComp = ({data}: SlidingVideoCompProps, ref: any) => {
         // hideShutterView={true} // no effect
 
         // Uses surface view by defult
-        useTextureView={true}
+        // useTextureView={true}
       />
     </View>
   );

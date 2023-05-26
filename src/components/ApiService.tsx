@@ -1,6 +1,10 @@
+import {Image} from 'react-native';
+
 // const BASE_URL =
 // 'https://c9a1-2409-4042-4b0e-9a29-413-70c5-80ec-f67a.ngrok-free.app/';
 const BASE_URL = 'http://52.205.233.46:8080/';
+// const BASE_URL =
+//   'https://9dca-2409-4042-4b0e-9a29-ac62-f591-5790-2a71.ngrok-free.app/';
 
 type GetSignedUrlProps = {
   fileExt: string;
@@ -31,10 +35,10 @@ export const GetSignedUrl = async (
 
 export const CreatePost = async (
   videoName: string | null,
-  thumbnailName: string | null,
+  // thumbnailName: string | null,
 ) => {
   console.log('Creating Post...');
-  console.log({thumbnailName});
+  // console.log({thumbnailName});
 
   const END_POINT = 'api/v1/video-url';
   const url = BASE_URL + END_POINT;
@@ -42,7 +46,7 @@ export const CreatePost = async (
     method: 'POST',
     body: JSON.stringify({
       videoUrl: videoName,
-      thumbnail: thumbnailName,
+      // thumbnail: thumbnailName,
     }),
   })
     .then(async response => {
@@ -67,6 +71,7 @@ export const GetPostsList = async ({limit, offset}: getPostsListProps) => {
       const result = await response.json();
       posts.data = result.data;
       posts.isLast = result.isLast;
+      cacheThumbnails(result.data);
     })
     .catch(err => {
       console.log('Error in getting Post: ', {err});
@@ -74,6 +79,22 @@ export const GetPostsList = async ({limit, offset}: getPostsListProps) => {
     });
   return posts;
 };
+
+const cacheThumbnails = async (data: any) => {
+  data.forEach((data: any) => {
+    const thumbUrl = data.thumbnail;
+    console.log({thumbUrl}, {data});
+    if (thumbUrl) {
+      console.log('prefetching thumbnails');
+      Image.prefetch(thumbUrl).then(res => {
+        console.log('++++++++++++++++++++++++++++++++++++++++++++++++');
+        console.log({res});
+        console.log('++++++++++++++++++++++++++++++++++++++++++++++++');
+      });
+    }
+  });
+};
+
 type getPostsListProps = {
   offset: number;
   limit: number;
