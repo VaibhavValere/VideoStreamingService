@@ -35,10 +35,10 @@ export const GetSignedUrl = async (
 
 export const CreatePost = async (
   videoName: string | null,
-  // thumbnailName: string | null,
+  thumbnailName: string | null,
 ) => {
   console.log('Creating Post...');
-  // console.log({thumbnailName});
+  console.log({thumbnailName});
 
   const END_POINT = 'api/v1/video-url';
   const url = BASE_URL + END_POINT;
@@ -46,12 +46,13 @@ export const CreatePost = async (
     method: 'POST',
     body: JSON.stringify({
       videoUrl: videoName,
-      // thumbnail: thumbnailName,
+      thumbnail: thumbnailName,
     }),
   })
     .then(async response => {
       const result = await response.json();
-      console.log('Created post Successfully: ', {result});
+      console.log('Created post Successfully: ', result.status);
+      console.log(result.data);
     })
     .catch(err => {
       console.log('Error in creating Post: ', {err});
@@ -83,14 +84,16 @@ export const GetPostsList = async ({limit, offset}: getPostsListProps) => {
 const cacheThumbnails = async (data: any) => {
   data.forEach((data: any) => {
     const thumbUrl = data.thumbnail;
-    console.log({thumbUrl}, {data});
     if (thumbUrl) {
       console.log('prefetching thumbnails');
-      Image.prefetch(thumbUrl).then(res => {
-        console.log('++++++++++++++++++++++++++++++++++++++++++++++++');
-        console.log({res});
-        console.log('++++++++++++++++++++++++++++++++++++++++++++++++');
-      });
+      Image.prefetch(thumbUrl)
+        .then(res => {
+          console.log('++++++++++++++++++++++++++++++++++++++++++++++++');
+          console.log({res}, data.thumbnail);
+        })
+        .catch(err => {
+          console.log('Error in getting thumbnails: ', {err});
+        });
     }
   });
 };

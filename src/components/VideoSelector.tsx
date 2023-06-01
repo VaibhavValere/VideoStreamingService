@@ -7,13 +7,21 @@ import {
   Button,
   Image,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {launchImageLibrary} from 'react-native-image-picker';
 import {createThumbnail} from 'react-native-create-thumbnail';
 import {Video} from 'react-native-compressor';
 import {VideoUpload, uploadFetch} from './VideoUpload';
-import {GetPostsList} from './ApiService';
+
+import DocumentPicker, {
+  DirectoryPickerResponse,
+  DocumentPickerResponse,
+  isCancel,
+  isInProgress,
+  types,
+} from 'react-native-document-picker';
 
 type VideoSelectorProps = {
   navigation: object;
@@ -36,7 +44,8 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       selectionLimit: 1,
     })
       .then(res => {
-        console.log(res);
+        console.log('+++++++++++++++=');
+        console.log(res.assets);
         if (res.assets) {
           console.log(res.assets[0]);
           res.assets && setStatus('Media selected');
@@ -60,22 +69,56 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
       });
   };
 
+  const SelectDocument = async () => {
+    try {
+      const pickerResult = await DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        // copyTo: 'cachesDirectory',
+        type: types.video,
+      });
+      // File selected
+      console.log({pickerResult});
+      setStatus('Media Selected');
+      setSelectedMedia(pickerResult);
+      // Create thubmnail
+      await createThumbnail({
+        url: pickerResult.uri || ' ',
+      }).then(res => {
+        console.log('THumbnail: ', res);
+        setSelectedThumbnail(res);
+      });
+    } catch (err) {
+      if (isCancel(err)) {
+        console.warn('cancelled');
+        // User cancelled the picker, exit any dialogs or menus and move on
+      } else if (isInProgress(err)) {
+        console.warn(
+          'multiple pickers were opened, only the last will be considered',
+        );
+      } else {
+        throw err;
+      }
+    }
+  };
+
   const SelectorComponent = () => {
     return (
       <View style={styles.rowStyle}>
-        <Button title="Open Gallery" onPress={SelectMedia} />
-        <Text>{status}</Text>
+        {/* <Button title="Open Gallery" onPress={SelectMedia} /> */}
+        <Button title="Open Document Picker" onPress={SelectDocument} />
+
+        <Text style={styles.bg}>{status}</Text>
         {selectedThumbnail && (
           <>
             <Image
-              source={{uri: selectedThumbnail.path}}
+              source={{uri: selectedThumbnail?.path}}
               style={styles.thumbnailSize}
             />
-            <Text>
+            <Text style={styles.bg}>
               Orignal File Size:
               {Math.round(selectedMedia?.fileSize / (1024 * 1024))}MB
             </Text>
-            <Text>
+            <Text style={styles.bg}>
               Thumbnail File Size:
               {Math.round(selectedThumbnail?.size / 1024)}KB
             </Text>
@@ -132,6 +175,7 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
           url={selectedMedia?.uri}
           type={selectedMedia.type}
           thumbnail={selectedThumbnail}
+          selectedMedia={selectedMedia}
         />
       )}
 
@@ -165,5 +209,8 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     backgroundColor: '#9f9898',
+  },
+  bg: {
+    backgroundColor: 'green',
   },
 });

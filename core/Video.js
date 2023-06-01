@@ -90,11 +90,17 @@ export default class Video extends Component {
 
   _hidePoster = () => {
     if (this.state.showPoster) {
-      this.setState({ showPoster: false });
+      // this.setState({ showPoster: false });
+      // !
+      setTimeout(() => {
+        this.setState({ showPoster: false });
+      }, 300);
     }
   }
 
   _onLoadStart = (event) => {
+    // !
+     this.setState({ showPoster: true });
     if (this.props.onLoadStart) {
       this.props.onLoadStart(event.nativeEvent);
     }
