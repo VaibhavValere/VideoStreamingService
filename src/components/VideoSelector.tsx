@@ -169,7 +169,12 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
         color={'black'}
         size={'large'}
       />
-
+      <Button
+        title={'Gallery View'}
+        onPress={() => {
+          navigation.navigate('Gallery');
+        }}
+      />
       {selectedMedia?.uri && (
         <VideoUpload
           url={selectedMedia?.uri}
@@ -178,14 +183,12 @@ export const VideoSelector = ({navigation}: VideoSelectorProps) => {
           selectedMedia={selectedMedia}
         />
       )}
-
       <Button
         title="View Videos"
         onPress={async () => {
           navigation.navigate('VideoSlider');
         }}
       />
-
       <Button
         title="Recycle List"
         onPress={() => navigation.navigate('RecycleList')}

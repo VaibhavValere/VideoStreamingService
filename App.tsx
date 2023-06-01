@@ -14,6 +14,8 @@ import {VideoSlider} from './src/components/VideoSlider';
 import {RecycleList} from './src/components/RecycleList';
 import {Provider} from 'react-redux';
 import SlidingVideoComp from './src/components/SlidingVideoComp';
+import {Gallery} from './src/screens/Gallery';
+import {NewVideoUploader} from './src/screens/NewVideoUploader';
 
 import configureStore from './src/redux/configureStore';
 const store = configureStore();
@@ -30,6 +32,8 @@ function App(): JSX.Element {
           <Stack.Screen name="VideoSelector" component={VideoSelector} />
           <Stack.Screen name="VideoSlider" component={VideoSlider} />
           <Stack.Screen name="RecycleList" component={RecycleList} />
+          <Stack.Screen name="Gallery" component={Gallery} />
+          <Stack.Screen name="NewVideoUploader" component={NewVideoUploader} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
