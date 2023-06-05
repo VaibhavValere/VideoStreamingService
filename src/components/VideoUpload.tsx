@@ -19,8 +19,8 @@ export const VideoUpload = (props: any) => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>Video Uploader</Text>
-      {/* <Button
-        title="Upload Without Compression"
+      <Button
+        title="Upload Fetch"
         onPress={() => {
           console.log(props.selectedMedia);
           uploadFetch(
@@ -31,7 +31,7 @@ export const VideoUpload = (props: any) => {
             props?.selectedMedia?.name,
           );
         }}
-      /> */}
+      />
       <Button
         title="Upload With RN-Fetch-Blob"
         onPress={() => {

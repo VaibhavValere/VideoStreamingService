@@ -1,10 +1,9 @@
 import {Image} from 'react-native';
 
 // const BASE_URL =
-// 'https://c9a1-2409-4042-4b0e-9a29-413-70c5-80ec-f67a.ngrok-free.app/';
+//   'https://5a0b-2409-4042-4c1b-9494-6040-751c-c37c-792f.ngrok-free.app/';
 const BASE_URL = 'http://52.205.233.46:8080/';
-// const BASE_URL =
-//   'https://9dca-2409-4042-4b0e-9a29-ac62-f591-5790-2a71.ngrok-free.app/';
+// const BASE_URL = 'http://192.168.0.147:8081/';
 
 type GetSignedUrlProps = {
   fileExt: string;
@@ -35,7 +34,7 @@ export const GetSignedUrl = async (
 
 export const CreatePost = async (
   videoName: string | null,
-  thumbnailName: string | null,
+  thumbnailName?: string | null,
 ) => {
   console.log('Creating Post...');
   console.log({thumbnailName});

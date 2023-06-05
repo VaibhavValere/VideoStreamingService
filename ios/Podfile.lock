@@ -407,6 +407,8 @@ PODS:
     - React-Core
   - RNCMaskedView (0.2.9):
     - React-Core
+  - RNConvertPhAsset (1.0.3):
+    - React
   - RNFS (2.20.0):
     - React-Core
   - RNScreens (3.20.0):
@@ -484,6 +486,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
+  - RNConvertPhAsset (from `../node_modules/react-native-convert-ph-asset`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -592,6 +595,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
+  RNConvertPhAsset:
+    :path: "../node_modules/react-native-convert-ph-asset"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNScreens:
@@ -656,6 +661,7 @@ SPEC CHECKSUMS:
   ReactCommon: 7efec56db1e74f34e24beadcdda6942829d19c4c
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCMaskedView: 949696f25ec596bfc697fc88e6f95cf0c79669b6
+  RNConvertPhAsset: 9b366b8a1abc194b76572712c6f7dd89c9e4e37f
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNScreens: 218801c16a2782546d30bd2026bb625c0302d70f
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608

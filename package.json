@@ -22,6 +22,7 @@
     "react-native": "0.71.7",
     "react-native-aws3": "^0.0.9",
     "react-native-compressor": "^1.6.1",
+    "react-native-convert-ph-asset": "^1.0.3",
     "react-native-create-thumbnail": "^1.6.4",
     "react-native-document-picker": "^9.0.1",
     "react-native-fs": "^2.20.0",
